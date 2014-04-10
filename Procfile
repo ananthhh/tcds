@@ -1,0 +1,1 @@
+web: target/universal/stage/bin/tc_smartsheet_docusign -Dhttp.port=$PORT -Dconfig.resource=application.conf
