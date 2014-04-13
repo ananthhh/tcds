@@ -6,6 +6,7 @@
 GET     /login                  	controllers.Application.login()
 GET     /logout                     controllers.Application.logout()
 GET     /authenticate               controllers.Application.authenticate()
+GET		/oauth						controllers.Application.OAuth()
 GET     /                           controllers.Dashboard.render()
 GET     /sendNew                    controllers.SendNew.render()
 GET     /sheets                     controllers.SendNew.getSheets()

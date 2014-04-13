@@ -17,9 +17,11 @@ import com.smartsheet.api.oauth.OAuthFlow;
 import com.smartsheet.api.oauth.OAuthFlowBuilder;
 import com.smartsheet.api.oauth.Token;
 
+import play.Logger;
 import play.cache.Cache;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.EnvironmentVariables;
 import views.html.dashboard;
 import views.html.login;
 
@@ -30,7 +32,22 @@ public class Application extends Controller {
 	    return ok(login.render());
 	}
 	
-	public static Result authenticate() throws SmartsheetException{
+	public static Result authenticate() throws SmartsheetException, UnsupportedEncodingException, URISyntaxException, 
+	NoSuchAlgorithmException{
+		
+		Logger.info(request().uri());
+		OAuthFlow oauth = new OAuthFlowBuilder().setClientId(System.getenv(EnvironmentVariables.SMARTSHEET_CLIENT_ID)).setClientSecret(System.getenv(EnvironmentVariables.SMARTSHEET_APP_SECRET)).
+				setRedirectURL(System.getenv(EnvironmentVariables.SMARTSHEET_REDIRECT_URL)).build();
+		String authorizationResponseURL = request().uri();
+
+		// On this page pass in the full URL of the page to create an authorizationResult object  
+		AuthorizationResult authResult = oauth.extractAuthorizationResult(authorizationResponseURL);
+
+		Token token = oauth.obtainNewToken(authResult);
+		Logger.info(token.getAccessToken());
+		
+		String accessToken=token.getAccessToken();
+		
 		Smartsheet smartsheet = new SmartsheetBuilder().setAccessToken("6fey44jw6g2l9rbguhmorttuob").build();
 		UserProfile me = smartsheet.users().getCurrentUser();
 		User user = Ebean.find(User.class)  
@@ -64,5 +81,19 @@ public class Application extends Controller {
 		Cache.remove(session().get("email")+"envelope");
 	}
 	
+	public static Result OAuth() throws SmartsheetException, UnsupportedEncodingException, URISyntaxException, 
+	NoSuchAlgorithmException {
+
+	// Setup the information that is necessary to request an authorization code
+	OAuthFlow oauth = new OAuthFlowBuilder().setClientId(System.getenv(EnvironmentVariables.SMARTSHEET_CLIENT_ID)).setClientSecret(System.getenv(EnvironmentVariables.SMARTSHEET_APP_SECRET)).
+		setRedirectURL(System.getenv(EnvironmentVariables.SMARTSHEET_REDIRECT_URL)).build();
+
+	// Create the URL that the user will go to grant authorization to the application
+	String url = oauth.newAuthorizationURL(EnumSet.of(com.smartsheet.api.oauth.AccessScope.CREATE_SHEETS, 
+			com.smartsheet.api.oauth.AccessScope.WRITE_SHEETS), "key=1123332");
+
+	return redirect(url);
+
+	}
 	
 }

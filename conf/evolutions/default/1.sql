@@ -20,7 +20,7 @@ create table envelope (
   date_last_updated         timestamp not null,
   user_id                   bigint,
   status                    varchar(7) not null,
-  constraint ck_envelope_status check (status in ('CREATED','SENT')),
+  constraint ck_envelope_status check (status in ('CREATED','SENT','SIGNED')),
   constraint uq_envelope_envelope_id unique (envelope_id),
   constraint pk_envelope primary key (id))
 ;
@@ -75,6 +75,3 @@ drop sequence if exists envelope_seq;
 
 drop sequence if exists user_details_seq;
 
-
-postgres://nrhhezfxicabvy:ppKET2N7h2U8LHS-Ed6_vx7t-1@ec2-107-20-224-35.compute-1.amazonaws.com:5432/db1oaipql83460
-postgres://postgres:password@localhost:5432/tcds
