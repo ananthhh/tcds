@@ -22,7 +22,7 @@
 	        <tbody>
 	        @for((env, index) <- envelopes.zipWithIndex) {
 	          <tr>
-	            <td>@index+1</td>
+	            <td>@(index+1)</td>
 	            <td>@env.getEmailSubject</td>
 	            <td>@env.getDateLastUpdated</td>
 	            @for(doc <- env.getDocuments){

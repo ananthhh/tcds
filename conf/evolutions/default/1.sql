@@ -28,9 +28,9 @@ create table envelope (
 create table recipient (
   email                     varchar(255) not null,
   name                      varchar(255) not null,
-  recipient_status          varchar(12) not null,
+  recipient_status          varchar(10) not null,
   envelope_id               bigint,
-  constraint ck_recipient_recipient_status check (recipient_status in ('NOT_RECIEVED','RECIEVED','SIGNED','DECLINED')))
+  constraint ck_recipient_recipient_status check (recipient_status in ('created','sent','delivered','signed','declined','completed','faxpending')))
 ;
 
 create table user_details (
@@ -75,3 +75,6 @@ drop sequence if exists envelope_seq;
 
 drop sequence if exists user_details_seq;
 
+
+postgres://nrhhezfxicabvy:ppKET2N7h2U8LHS-Ed6_vx7t-1@ec2-107-20-224-35.compute-1.amazonaws.com:5432/db1oaipql83460
+postgres://postgres:password@localhost:5432/tcds

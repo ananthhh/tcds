@@ -14,10 +14,13 @@ import play.db.ebean.Model;
 public class Recipient extends Model{
 	
 	public enum Status {
-		NOT_RECIEVED,
-		RECIEVED,
-		SIGNED,
-		DECLINED
+		created,
+		sent,
+		delivered,
+		signed,
+		declined,
+		completed,
+		faxpending
 	}
 	
 	@Column(nullable = false)
@@ -28,7 +31,7 @@ public class Recipient extends Model{
 	
     @Enumerated(value=EnumType.STRING)
     @Column(nullable = false)
-    private Status recipientStatus = Status.NOT_RECIEVED;
+    private Status recipientStatus = Status.created;
     
     @ManyToOne
     @JoinColumn(name="envelope_id")

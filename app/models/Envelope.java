@@ -32,7 +32,8 @@ public class Envelope extends Model {
 	private static final long serialVersionUID = 1L;
 	public enum Status {
 		CREATED,
-		SENT
+		SENT,
+		SIGNED
 	}
 	
 	@Id
