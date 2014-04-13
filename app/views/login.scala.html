@@ -1,0 +1,17 @@
+@main("Login") { 
+	<div class="container">
+	<div class="jumbotron">
+            <h2 class="text-center">Login</h2><br/>
+           @if(flash.contains("success")) {
+		    <p class="success text-center">
+		        @flash.get("success")
+		    </p>
+		}
+            <div style="max-width: 400px; margin: 0 auto 10px;">
+                <a class="btn btn-primary btn-lg btn-block" href="/authenticate">
+                    <i></i> <span class="glyphicon glyphicon-cloud"></span> <span>Login with <strong>Smartsheet</strong></span>
+                </a>
+            </div>
+        </div>
+        </div>
+}

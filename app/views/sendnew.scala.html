@@ -1,0 +1,62 @@
+@main("Send New Document"){
+<div class="container">
+<div class="row">
+
+	<div class="col-md-6 sendnew">
+		<ul class="nav nav-tabs nav-justified page-header">
+      		<li id="tabSheet" class="active"><a>Select Sheet</a></li>
+      		<li id="tabAttachment"><a>Select Attachment</a></li>
+      		<li id="tabRecipient"><a>Select Recipient</a></li>
+      		<li id="tabSend"><a>Confirm & Send</a></li>
+    	</ul>
+		<div id="notification" class="alert alert-info">
+		   <strong>Loading Sheets...</strong>
+		</div>
+		<div id="sheet" class="container" style="display:none">
+			<input type="hidden" id="sheetDropdown" style="width:300px"/>
+			<button type="button" class="btn btn-success" onclick="loadAttachments()">Next </button>
+		</div>
+		<div id="attachment" class="container" style="display:none">
+			<input type="hidden" id="attachmentDropdown" style="width:300px"/>
+			<button type="button" class="btn btn-success" onclick="postAttachment();loadRecipients()">Next </button>
+			<button type="button" class="btn btn-danger" onclick="loadSheets()">Go back</button>
+		</div>
+		<div id="recipient" class="container" style="display:none">
+			<p> Name: <input type="text" id="recipientName" style="width:300px"/> </p>
+			<p> Email: <input type="text" id="recipientEmail" style="width:300px"/></p>
+			<button type="button" class="btn btn-success nextButton" onclick="postRecipients();loadSend()">Next </button>
+			<button type="button" class="btn btn-danger nextButton" onclick="loadAttachments()">Go back</button>
+		</div>
+		<div id="tagsend" class="container" style="display:none">
+			
+			<button type="button" class="btn btn-success nextButton"><a href="create"> Submit </a></button>
+			<button type="button" class="btn btn-danger nextButton" onclick="loadRecipients()">Go back</button>
+		</div>
+	</div>
+	<div class="col-md-4">
+	<h3 class="page-header">Your selection</h3>
+		<div class="panel panel-default">
+			<div class="panel-heading">Sheet</div>
+		  	<div id="panelSheet" class="panel-body">
+		    	<span class="text"></span>
+		    	<span class="value" style="display:none"></span>
+		  	</div>
+		  	<div class="panel-heading">Attachment</div>
+		  	<div id="panelAttachment" class="panel-body">
+		    	<span class="text"> </span>
+		    	<span class="value" style="display:none"> </span>
+		  	</div>
+		  	<div class="panel-heading">Recipients</div>
+		  	<div id="panelReipients" class="panel-body">
+		  		<span class="text"> </span>
+		    	<span class="value" style="display:none"> </span>
+		  	</div>
+		</div>
+	</div>
+</div>
+
+</div>
+<script src="/assets/js/sendnew.js" type="text/javascript"></script>
+<script src="/assets/js/selectize.min.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/jquery-ui.min.js"></script>
+}

@@ -2,3 +2,7 @@ body {
   padding-top: 70px;
   padding-bottom: 30px;
 }
+
+.sendnew > .list-group {
+	max-width : 400px;
+}

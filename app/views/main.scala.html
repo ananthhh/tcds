@@ -8,12 +8,16 @@
         <meta charset="utf-8">
     	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/bootstrap.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/bootstrap-theme.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         
+        <link rel="stylesheet" media="screen" href="/assets/css/bootstrap-theme.css">
+        <link rel="stylesheet" media="screen" href="/assets/css/bootstrap.css">
+        <link rel="stylesheet" media="screen" href="/assets/css/main.css">
+        <link rel="stylesheet" media="screen" href="/assets/css/select2.css">
+        <link rel="stylesheet" media="screen" href="/assets/css/select2-bootstrap.css">
+        <link rel="stylesheet" media="screen" href="/assets/css/selectize.default.css">
+        <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
+        
+        <script src="/assets/js/jquery-1.9.0.min.js" type="text/javascript"></script>
     </head>
     <body>
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -25,34 +29,24 @@
 	            <span class="icon-bar"></span>
 	            <span class="icon-bar"></span>
 	          </button>
-	          <a class="navbar-brand" href="#">Bootstrap theme</a>
+	          <a class="navbar-brand" href="#">Smartsheet Docusign Integration</a>
 	        </div>
 	        <div class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav">
-	            <li class="active"><a href="#">Home</a></li>
-	            <li><a href="#about">About</a></li>
-	            <li><a href="#contact">Contact</a></li>
-	            <li class="dropdown">
-	              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-	              <ul class="dropdown-menu">
-	                <li><a href="#">Action</a></li>
-	                <li><a href="#">Another action</a></li>
-	                <li><a href="#">Something else here</a></li>
-	                <li class="divider"></li>
-	                <li class="dropdown-header">Nav header</li>
-	                <li><a href="#">Separated link</a></li>
-	                <li><a href="#">One more separated link</a></li>
-	              </ul>
-	            </li>
+	          @if(title != "Login"){
+	            <li @if(title == "Dashboard"){class="active"}><a href="/">Dashboard</a></li>
+	            <li @if(title == "Send New Document"){class="active"}><a href="/sendNew">Send New</a></li>
+	            <li><a href="/logout">Logout</a></li>
+	           }
 	          </ul>
 	        </div><!--/.nav-collapse -->
 	      </div>
 	    </div>
+	    
 		@content
-
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="@routes.Assets.at("js/jquery-1.9.0.min.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("js/bootstrap.js")" type="text/javascript"></script>
+        <script src="/assets/js/bootstrap.js" type="text/javascript"></script>
+        <script src="/assets/js/select2.js" type="text/javascript"></script>
         
     </body>
 </html>
