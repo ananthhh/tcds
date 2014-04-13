@@ -12,6 +12,7 @@ import com.smartsheet.api.Smartsheet;
 import com.smartsheet.api.SmartsheetBuilder;
 import com.smartsheet.api.SmartsheetException;
 import com.smartsheet.api.models.UserProfile;
+import com.smartsheet.api.oauth.AccessDeniedException;
 import com.smartsheet.api.oauth.AuthorizationResult;
 import com.smartsheet.api.oauth.OAuthFlow;
 import com.smartsheet.api.oauth.OAuthFlowBuilder;
@@ -36,35 +37,39 @@ public class Application extends Controller {
 	NoSuchAlgorithmException{
 		
 		Logger.info(request().uri());
-		OAuthFlow oauth = new OAuthFlowBuilder().setClientId(System.getenv(EnvironmentVariables.SMARTSHEET_CLIENT_ID)).setClientSecret(System.getenv(EnvironmentVariables.SMARTSHEET_APP_SECRET)).
-				setRedirectURL(System.getenv(EnvironmentVariables.SMARTSHEET_REDIRECT_URL)).build();
-		String authorizationResponseURL = request().uri();
-
-		// On this page pass in the full URL of the page to create an authorizationResult object  
-		AuthorizationResult authResult = oauth.extractAuthorizationResult(authorizationResponseURL);
-
-		Token token = oauth.obtainNewToken(authResult);
-		Logger.info(token.getAccessToken());
-		
-		String accessToken=token.getAccessToken();
-		
-		Smartsheet smartsheet = new SmartsheetBuilder().setAccessToken("6fey44jw6g2l9rbguhmorttuob").build();
-		UserProfile me = smartsheet.users().getCurrentUser();
-		User user = Ebean.find(User.class)  
-			    .where()  
-			      .eq("email", me.getEmail()).findUnique();  
-		if(null == user) user =new User();
-		user.setEmail(me.getEmail());
-		user.setName(me.getName());
-		user.setFirstName(me.getFirstName());
-		user.setLastName(me.getLastName());
-		user.setAccessToken("6fey44jw6g2l9rbguhmorttuob");
-		Ebean.save(user);
-		
-		session().put("email", user.getEmail());
-		session().put("userId", user.getId().toString());
-		session().put("accessToken", user.getAccessToken());
-		clearCache(user.getEmail());
+		try{
+			OAuthFlow oauth = new OAuthFlowBuilder().setClientId(System.getenv(EnvironmentVariables.SMARTSHEET_CLIENT_ID)).setClientSecret(System.getenv(EnvironmentVariables.SMARTSHEET_APP_SECRET)).
+					setRedirectURL(System.getenv(EnvironmentVariables.SMARTSHEET_REDIRECT_URL)).build();
+			String authorizationResponseURL = request().uri();
+	
+			// On this page pass in the full URL of the page to create an authorizationResult object  
+			AuthorizationResult authResult = oauth.extractAuthorizationResult(authorizationResponseURL);
+	
+			Token token = oauth.obtainNewToken(authResult);
+			Logger.error(token.getAccessToken());
+			
+			String accessToken=token.getAccessToken();
+			Smartsheet smartsheet = new SmartsheetBuilder().setAccessToken(accessToken).build();
+			UserProfile me = smartsheet.users().getCurrentUser();
+			User user = Ebean.find(User.class)  
+				    .where()  
+				      .eq("email", me.getEmail()).findUnique();  
+			if(null == user) user =new User();
+			user.setEmail(me.getEmail());
+			user.setName(me.getName());
+			user.setFirstName(me.getFirstName());
+			user.setLastName(me.getLastName());
+			user.setAccessToken(accessToken);
+			Ebean.save(user);
+			
+			session().put("email", user.getEmail());
+			session().put("userId", user.getId().toString());
+			session().put("accessToken", user.getAccessToken());
+			clearCache(user.getEmail());
+		}catch(AccessDeniedException e){
+			flash("success", "Authentication failed. Please try again");
+			return redirect(routes.Application.login());
+		}
 		return redirect(routes.Dashboard.render());
 	}
 	
@@ -90,7 +95,8 @@ public class Application extends Controller {
 
 	// Create the URL that the user will go to grant authorization to the application
 	String url = oauth.newAuthorizationURL(EnumSet.of(com.smartsheet.api.oauth.AccessScope.CREATE_SHEETS, 
-			com.smartsheet.api.oauth.AccessScope.WRITE_SHEETS), "key=1123332");
+			com.smartsheet.api.oauth.AccessScope.WRITE_SHEETS, com.smartsheet.api.oauth.AccessScope.READ_SHEETS,
+			com.smartsheet.api.oauth.AccessScope.ADMIN_USERS), "key=1123332");
 
 	return redirect(url);
 
