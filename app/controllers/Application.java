@@ -64,32 +64,5 @@ public class Application extends Controller {
 		Cache.remove(session().get("email")+"envelope");
 	}
 	
-	public static void OAuth() throws SmartsheetException, UnsupportedEncodingException, URISyntaxException, 
-	NoSuchAlgorithmException {
-
-	// Setup the information that is necessary to request an authorization code
-	OAuthFlow oauth = new OAuthFlowBuilder().setClientId("YOUR_CLIENT_ID").setClientSecret("YOUR_CLIENT_SECRET").
-		setRedirectURL("https://YOUR_DOMAIN.com/").build();
-
-	// Create the URL that the user will go to grant authorization to the application
-	String url = oauth.newAuthorizationURL(EnumSet.of(com.smartsheet.api.oauth.AccessScope.CREATE_SHEETS, 
-			com.smartsheet.api.oauth.AccessScope.WRITE_SHEETS), "key=YOUR_VALUE");
-
-	// Take the user to the following URL
-	System.out.println(url);
-
-	// After the user accepts or declines the authorization they are taken to the redirect URL. The URL of the page
-	// the user is taken to can be used to generate an authorization Result object.
-	String authorizationResponseURL = "https://yourDomain.com/?code=l4csislal82qi5h&expires_in=239550&state=key%3D12344";
-
-	// On this page pass in the full URL of the page to create an authorizationResult object  
-	AuthorizationResult authResult = oauth.extractAuthorizationResult(authorizationResponseURL);
-
-	
-	// Get the token from the authorization result
-	Token token = oauth.obtainNewToken(authResult);
-
-	// Save the token or use it.
-	}
 	
 }
